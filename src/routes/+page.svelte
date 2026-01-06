@@ -152,6 +152,16 @@
 									<p class="text-sm sm:text-base text-muted-foreground/70">
 										July 2025 - Present
 									</p>
+									<p class="text-xs sm:text-sm text-muted-foreground/80">
+										<a
+											href="https://neuraldecks.app"
+											target="_blank"
+											rel="noopener noreferrer"
+											class="underline underline-offset-4 hover:text-primary"
+										>
+											Visit neuraldecks.app
+										</a>
+									</p>
 								</div>
 
 								<!-- Description -->
@@ -298,6 +308,16 @@
 									<p class="text-sm sm:text-base text-muted-foreground/70">
 										San Francisco, CA — July 2020 - July 2023 (3 years)
 									</p>
+									<p class="text-xs sm:text-sm text-muted-foreground/80">
+										<a
+											href="https://squareup.com"
+											target="_blank"
+											rel="noopener noreferrer"
+											class="underline underline-offset-4 hover:text-primary"
+										>
+											Visit squareup.com
+										</a>
+									</p>
 								</div>
 
 								<!-- Bullet Points -->
@@ -422,6 +442,16 @@
 									</p>
 									<p class="text-sm sm:text-base text-muted-foreground/70">
 										San Francisco, CA — October 2018 - July 2020 (2 years)
+									</p>
+									<p class="text-xs sm:text-sm text-muted-foreground/80">
+										<a
+											href="https://squareup.com/us/en/press/stitchlabs-welcome"
+											target="_blank"
+											rel="noopener noreferrer"
+											class="underline underline-offset-4 hover:text-primary"
+										>
+											Read Stitch Labs acquisition press release
+										</a>
 									</p>
 								</div>
 
