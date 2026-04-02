@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Mail, Github, Linkedin, ExternalLink, Cloud } from 'lucide-svelte';
+	import { Mail, Github, Linkedin, ExternalLink, Cloud, Send } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button.svelte';
 </script>
 
@@ -640,6 +640,87 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</section>
+		<!-- Contact Section -->
+		<section class="mt-20 sm:mt-24 md:mt-32">
+			<div class="space-y-8 sm:space-y-12">
+				<!-- Decorative divider -->
+				<div>
+					<div
+						class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent"
+					></div>
+					<div
+						class="h-px w-1/3 mt-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent"
+					></div>
+				</div>
+
+				<h2
+					class="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground"
+				>
+					Get in Touch
+				</h2>
+
+				<form
+					action="https://statikform.com/api/f/f6226553e4f4fd40"
+					method="POST"
+					class="space-y-4 sm:space-y-6 max-w-xl"
+				>
+					<div class="space-y-1.5 sm:space-y-2">
+						<label for="name" class="block text-sm sm:text-base text-muted-foreground">
+							Name
+						</label>
+						<input
+							id="name"
+							name="name"
+							type="text"
+							required
+							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
+							placeholder="Your name"
+						/>
+					</div>
+
+					<div class="space-y-1.5 sm:space-y-2">
+						<label for="email" class="block text-sm sm:text-base text-muted-foreground">
+							Email
+						</label>
+						<input
+							id="email"
+							name="email"
+							type="email"
+							required
+							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
+							placeholder="you@example.com"
+						/>
+					</div>
+
+					<div class="space-y-1.5 sm:space-y-2">
+						<label for="message" class="block text-sm sm:text-base text-muted-foreground">
+							Message
+						</label>
+						<textarea
+							id="message"
+							name="message"
+							rows="5"
+							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors resize-y"
+							placeholder="What's on your mind?"
+						></textarea>
+					</div>
+
+					<div class="pt-2">
+						<Button
+							type="submit"
+							variant="outline"
+							size="lg"
+							class="group border-primary/30 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all"
+						>
+							<Send
+								class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 transition-transform flex-shrink-0"
+							/>
+							<span>Send Message</span>
+						</Button>
+					</div>
+				</form>
 			</div>
 		</section>
 	</div>
