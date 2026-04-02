@@ -660,7 +660,6 @@
 				>
 					Get in Touch
 				</h2>
-
 				<form
 					action="https://statikform.com/api/f/f6226553e4f4fd40"
 					method="POST"
