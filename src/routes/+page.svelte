@@ -661,7 +661,7 @@
 					Get in Touch
 				</h2>
 				<form
-					action="https://statikform.com/api/f/f6226553e4f4fd40"
+					action="https://statikform.com/api/f/d886a2bd5947e64d"
 					method="POST"
 					class="space-y-4 sm:space-y-6 max-w-xl"
 				>
