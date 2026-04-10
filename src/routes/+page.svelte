@@ -19,7 +19,7 @@
 			const token = await new Promise<string>((resolve, reject) => {
 				grecaptcha.ready(() => {
 					grecaptcha
-						.execute('6LeMvq8sAAAAABSkCoBsW8VmrCRPJddJKSfmumqF', { action: 'submit' })
+						.execute('6Lcf4bAsAAAAAAzoHvFn6Lmbd8_z7qn2fQGinunb', { action: 'submit' })
 						.then(resolve)
 						.catch(reject);
 				});
