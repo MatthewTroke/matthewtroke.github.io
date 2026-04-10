@@ -1,53 +1,13 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Mail, Github, Linkedin, ExternalLink, Cloud, Send } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button.svelte';
 
-	declare const grecaptcha: any;
-
-	let name = $state('');
-	let email = $state('');
-	let message = $state('');
-	let submitting = $state(false);
-	let submitStatus = $state<'idle' | 'success' | 'error'>('idle');
-
-	async function handleSubmit(e: SubmitEvent) {
-		e.preventDefault();
-		submitting = true;
-		submitStatus = 'idle';
-
-		try {
-			const token = await new Promise<string>((resolve, reject) => {
-				grecaptcha.ready(() => {
-					grecaptcha
-						.execute('6Lcf4bAsAAAAAAzoHvFn6Lmbd8_z7qn2fQGinunb', { action: 'submit' })
-						.then(resolve)
-						.catch(reject);
-				});
-			});
-
-			const res = await fetch('https://statikform.com/api/f/d886a2bd5947e64d', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					name,
-					email,
-					message,
-					'g-recaptcha-response': token
-				})
-			});
-
-			if (!res.ok) throw new Error('Failed to send');
-
-			submitStatus = 'success';
-			name = '';
-			email = '';
-			message = '';
-		} catch {
-			submitStatus = 'error';
-		} finally {
-			submitting = false;
-		}
-	}
+	onMount(() => {
+		(window as any).submitForm = () => {
+			document.getElementById('my-form')?.submit();
+		};
+	});
 </script>
 
 <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -708,7 +668,9 @@
 					Get in Touch
 				</h2>
 				<form
-					onsubmit={handleSubmit}
+					id="my-form"
+					action="https://statikform.com/api/f/d886a2bd5947e64d"
+					method="POST"
 					class="space-y-4 sm:space-y-6 max-w-xl"
 				>
 					<div class="space-y-1.5 sm:space-y-2">
@@ -720,7 +682,6 @@
 							name="name"
 							type="text"
 							required
-							bind:value={name}
 							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
 							placeholder="Your name"
 						/>
@@ -735,7 +696,6 @@
 							name="email"
 							type="email"
 							required
-							bind:value={email}
 							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
 							placeholder="you@example.com"
 						/>
@@ -749,32 +709,25 @@
 							id="message"
 							name="message"
 							rows="5"
-							bind:value={message}
 							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors resize-y"
 							placeholder="What's on your mind?"
 						></textarea>
 					</div>
 
 					<div class="pt-2">
-						<Button
+						<button
 							type="submit"
-							variant="outline"
-							size="lg"
-							disabled={submitting}
-							class="group border-primary/30 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all"
+							class="g-recaptcha inline-flex items-center gap-2 rounded-md border border-primary/30 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all px-6 py-2.5 text-sm sm:text-base font-medium cursor-pointer bg-transparent text-foreground"
+							data-sitekey="6Lcf4bAsAAAAAAzoHvFn6Lmbd8_z7qn2fQGinunb"
+							data-callback="submitForm"
+							data-action="submit"
 						>
 							<Send
-								class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 transition-transform flex-shrink-0"
+								class="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0"
 							/>
-							<span>{submitting ? 'Sending...' : 'Send Message'}</span>
-						</Button>
+							<span>Send Message</span>
+						</button>
 					</div>
-
-					{#if submitStatus === 'success'}
-						<p class="text-sm text-green-500">Message sent successfully!</p>
-					{:else if submitStatus === 'error'}
-						<p class="text-sm text-red-500">Failed to send message. Please try again.</p>
-					{/if}
 				</form>
 			</div>
 		</section>
