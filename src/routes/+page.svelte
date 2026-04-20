@@ -1,13 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { Mail, Github, Linkedin, ExternalLink, Cloud, Send } from 'lucide-svelte';
+	import { Mail, Github, Linkedin, ExternalLink, Cloud } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button.svelte';
-
-	onMount(() => {
-		(window as any).submitForm = () => {
-			document.getElementById('my-form')?.submit();
-		};
-	});
 </script>
 
 <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -661,74 +654,7 @@
 						class="h-px w-1/3 mt-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent"
 					></div>
 				</div>
-
-				<h2
-					class="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground"
-				>
-					Get in Touch
-				</h2>
-				<form
-					id="my-form"
-					action="https://statikform.com/api/f/d886a2bd5947e64d"
-					method="POST"
-					class="space-y-4 sm:space-y-6 max-w-xl"
-				>
-					<div class="space-y-1.5 sm:space-y-2">
-						<label for="name" class="block text-sm sm:text-base text-muted-foreground">
-							Name
-						</label>
-						<input
-							id="name"
-							name="name"
-							type="text"
-							required
-							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
-							placeholder="Your name"
-						/>
-					</div>
-
-					<div class="space-y-1.5 sm:space-y-2">
-						<label for="email" class="block text-sm sm:text-base text-muted-foreground">
-							Email
-						</label>
-						<input
-							id="email"
-							name="email"
-							type="email"
-							required
-							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
-							placeholder="you@example.com"
-						/>
-					</div>
-
-					<div class="space-y-1.5 sm:space-y-2">
-						<label for="message" class="block text-sm sm:text-base text-muted-foreground">
-							Message
-						</label>
-						<textarea
-							id="message"
-							name="message"
-							rows="5"
-							class="w-full rounded-md bg-muted/50 border border-border/50 px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors resize-y"
-							placeholder="What's on your mind?"
-						></textarea>
-					</div>
-
-					<div class="pt-2">
-						<button
-							type="submit"
-							class="g-recaptcha inline-flex items-center gap-2 rounded-md border border-primary/30 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all px-6 py-2.5 text-sm sm:text-base font-medium cursor-pointer bg-transparent text-foreground"
-							data-sitekey="6Lcf4bAsAAAAAAzoHvFn6Lmbd8_z7qn2fQGinunb"
-							data-callback="submitForm"
-							data-action="submit"
-						>
-							<Send
-								class="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform flex-shrink-0"
-							/>
-							<span>Send Message</span>
-						</button>
-					</div>
-				</form>
+				<div data-statikform="d886a2bd5947e64d" class="max-w-xl"></div>
 			</div>
 		</section>
 	</div>
