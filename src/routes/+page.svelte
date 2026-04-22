@@ -15,6 +15,8 @@
 	let inputEl: HTMLInputElement | null = $state(null);
 	let localTime = $state('—');
 	let submitting = $state(false);
+	let submitted = $state(false);
+	let submitError = $state('');
 
 	function scrollToId(id: string) {
 		closeCmdk();
@@ -72,6 +74,41 @@
 		if (c) c.action();
 	}
 
+	async function sendForm() {
+		const form = document.getElementById('contact-form') as HTMLFormElement | null;
+		if (!form) return;
+		if (!form.checkValidity()) {
+			form.reportValidity();
+			return;
+		}
+		const g = (window as unknown as {
+			grecaptcha?: { getResponse: () => string; reset: () => void };
+		}).grecaptcha;
+		const token = g?.getResponse() ?? '';
+		if (!token) {
+			submitError = 'reCAPTCHA verification failed';
+			return;
+		}
+		submitting = true;
+		submitError = '';
+		try {
+			const data = new FormData(form);
+			data.set('g-recaptcha-response', token);
+			const res = await fetch(form.action, {
+				method: 'POST',
+				body: data,
+				headers: { Accept: 'application/json' }
+			});
+			if (!res.ok) throw new Error(`Request failed (${res.status})`);
+			submitted = true;
+		} catch (err) {
+			submitError = err instanceof Error ? err.message : 'Unable to send message';
+			g?.reset();
+		} finally {
+			submitting = false;
+		}
+	}
+
 	function handleKey(e: KeyboardEvent) {
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
@@ -91,13 +128,7 @@
 		// reCAPTCHA callback — invoked after the invisible challenge passes,
 		// then we trigger a native form submit (statikform.js hijacks it).
 		(window as unknown as { submitForm: () => void }).submitForm = () => {
-			const form = document.getElementById('contact-form') as HTMLFormElement | null;
-			if (form && form.checkValidity()) {
-				submitting = true;
-				form.submit();
-			} else {
-				form?.reportValidity();
-			}
+			void sendForm();
 		};
 
 		const tick = () => {
@@ -359,65 +390,81 @@
 						contract work, technical founding roles, and interesting product engineering problems.
 					</p>
 
-					<form
-						id="contact-form"
-						class="contact-form"
-						action="https://statikform.com/api/f/d886a2bd5947e64d"
-						method="POST"
-					>
-						<div class="field">
-							<label for="contact-email">
-								<span class="lk">// email</span>
-								<span class="req">required</span>
-							</label>
-							<input
-								id="contact-email"
-								type="email"
-								name="email"
-								placeholder="you@example.com"
-								required
-							/>
+					{#if submitted}
+						<div class="contact-success" role="status" aria-live="polite">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M20 6 9 17l-5-5" />
+							</svg>
+							<div>
+								<strong>Message received.</strong>
+								<p>Thanks for reaching out — I&apos;ll get back to you shortly.</p>
+							</div>
 						</div>
+					{:else}
+						<form
+							id="contact-form"
+							class="contact-form"
+							action="https://statikform.com/api/f/d886a2bd5947e64d"
+							method="POST"
+							onsubmit={(e) => e.preventDefault()}
+						>
+							<div class="field">
+								<label for="contact-email">
+									<span class="lk">// email</span>
+									<span class="req">required</span>
+								</label>
+								<input
+									id="contact-email"
+									type="email"
+									name="email"
+									placeholder="you@example.com"
+									required
+								/>
+							</div>
 
-						<div class="field">
-							<label for="contact-message">
-								<span class="lk">// what's on your mind?</span>
-								<span class="req">required</span>
-							</label>
-							<textarea
-								id="contact-message"
-								name="textarea"
-								placeholder="Write here…"
-								rows="5"
-								required
-							></textarea>
-						</div>
+							<div class="field">
+								<label for="contact-message">
+									<span class="lk">// what's on your mind?</span>
+									<span class="req">required</span>
+								</label>
+								<textarea
+									id="contact-message"
+									name="textarea"
+									placeholder="Write here…"
+									rows="5"
+									required
+								></textarea>
+							</div>
 
-						<div class="field submit-row">
-							<button
-								type="submit"
-								class="btn primary g-recaptcha"
-								class:is-submitting={submitting}
-								disabled={submitting}
-								data-sitekey="6LdrwsQsAAAAAOuDfGy3napm2YnvDL7dsUEWjreV"
-								data-callback="submitForm"
-								data-action="submit"
-							>
-								{#if submitting}
-									<svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-										<path d="M12 3a9 9 0 1 1-9 9" />
-									</svg>
-									Sending…
-								{:else}
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-										<path d="M5 12h14M13 6l6 6-6 6" />
-									</svg>
-									Send message
-								{/if}
-							</button>
-							<span class="hint">protected by reCAPTCHA · no spam, ever</span>
-						</div>
-					</form>
+							<div class="field submit-row">
+								<button
+									type="submit"
+									class="btn primary g-recaptcha"
+									class:is-submitting={submitting}
+									disabled={submitting}
+									data-sitekey="6LdrwsQsAAAAAOuDfGy3napm2YnvDL7dsUEWjreV"
+									data-callback="submitForm"
+									data-action="submit"
+								>
+									{#if submitting}
+										<svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+											<path d="M12 3a9 9 0 1 1-9 9" />
+										</svg>
+										Sending…
+									{:else}
+										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<path d="M5 12h14M13 6l6 6-6 6" />
+										</svg>
+										Send message
+									{/if}
+								</button>
+								<span class="hint">protected by reCAPTCHA · no spam, ever</span>
+							</div>
+							{#if submitError}
+								<p class="submit-error" role="alert">{submitError}. Please try again.</p>
+							{/if}
+						</form>
+					{/if}
 
 					<div class="contact-links">
 						<a href="mailto:trokematthew@gmail.com">
@@ -1191,6 +1238,39 @@
 		font-size: 11px;
 		color: var(--ink-mute);
 		letter-spacing: 0.06em;
+	}
+	.submit-error {
+		font-size: 12px;
+		color: #ff8a8a;
+		margin: 4px 0 0;
+	}
+	.contact-success {
+		display: flex;
+		align-items: flex-start;
+		gap: 14px;
+		padding: 18px 20px;
+		border: 1px solid var(--accent);
+		border-radius: 8px;
+		background: linear-gradient(180deg, rgba(126, 231, 135, 0.08), transparent 80%);
+	}
+	.contact-success :global(svg) {
+		width: 22px;
+		height: 22px;
+		color: var(--accent);
+		flex-shrink: 0;
+		margin-top: 2px;
+	}
+	.contact-success strong {
+		display: block;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 13px;
+		color: var(--ink);
+		letter-spacing: 0.02em;
+	}
+	.contact-success p {
+		margin: 4px 0 0;
+		font-size: 13px;
+		color: var(--ink-mute);
 	}
 
 	.contact-links {
