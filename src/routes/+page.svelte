@@ -14,6 +14,7 @@
 	let activeIndex = $state(0);
 	let inputEl: HTMLInputElement | null = $state(null);
 	let localTime = $state('—');
+	let submitting = $state(false);
 
 	function scrollToId(id: string) {
 		closeCmdk();
@@ -91,8 +92,12 @@
 		// then we trigger a native form submit (statikform.js hijacks it).
 		(window as unknown as { submitForm: () => void }).submitForm = () => {
 			const form = document.getElementById('contact-form') as HTMLFormElement | null;
-			if (form && form.checkValidity()) form.submit();
-			else form?.reportValidity();
+			if (form && form.checkValidity()) {
+				submitting = true;
+				form.submit();
+			} else {
+				form?.reportValidity();
+			}
 		};
 
 		const tick = () => {
@@ -392,14 +397,23 @@
 							<button
 								type="submit"
 								class="btn primary g-recaptcha"
+								class:is-submitting={submitting}
+								disabled={submitting}
 								data-sitekey="6LdrwsQsAAAAAOuDfGy3napm2YnvDL7dsUEWjreV"
 								data-callback="submitForm"
 								data-action="submit"
 							>
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-									<path d="M5 12h14M13 6l6 6-6 6" />
-								</svg>
-								Send message
+								{#if submitting}
+									<svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+										<path d="M12 3a9 9 0 1 1-9 9" />
+									</svg>
+									Sending…
+								{:else}
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+										<path d="M5 12h14M13 6l6 6-6 6" />
+									</svg>
+									Send message
+								{/if}
 							</button>
 							<span class="hint">protected by reCAPTCHA · no spam, ever</span>
 						</div>
@@ -737,6 +751,21 @@
 	.btn :global(svg) {
 		width: 14px;
 		height: 14px;
+	}
+	.btn[disabled] {
+		cursor: not-allowed;
+		opacity: 0.75;
+	}
+	.btn.is-submitting:hover {
+		background: var(--accent);
+		color: #0a0b0d;
+		border-color: var(--accent);
+	}
+	.btn :global(svg.spinner) {
+		animation: spin 0.7s linear infinite;
+	}
+	@keyframes spin {
+		to { transform: rotate(360deg); }
 	}
 
 	.now-card {
