@@ -74,6 +74,27 @@
 		if (c) c.action();
 	}
 
+	const RECAPTCHA_SITE_KEY = '6LdrwsQsAAAAAOuDfGy3napm2YnvDL7dsUEWjreV';
+	const FORM_ENDPOINT = 'https://statikform.com/api/f/d886a2bd5947e64d';
+
+	type Grecaptcha = {
+		ready: (cb: () => void) => void;
+		execute: (siteKey: string, opts: { action: string }) => Promise<string>;
+	};
+
+	function getRecaptchaToken(): Promise<string> {
+		return new Promise((resolve, reject) => {
+			const g = (window as unknown as { grecaptcha?: Grecaptcha }).grecaptcha;
+			if (!g) {
+				reject(new Error('reCAPTCHA not loaded'));
+				return;
+			}
+			g.ready(() => {
+				g.execute(RECAPTCHA_SITE_KEY, { action: 'submit' }).then(resolve, reject);
+			});
+		});
+	}
+
 	async function sendForm() {
 		const form = document.getElementById('contact-form') as HTMLFormElement | null;
 		if (!form) return;
@@ -81,29 +102,24 @@
 			form.reportValidity();
 			return;
 		}
-		const g = (window as unknown as {
-			grecaptcha?: { getResponse: () => string; reset: () => void };
-		}).grecaptcha;
-		const token = g?.getResponse() ?? '';
-		if (!token) {
-			submitError = 'reCAPTCHA verification failed';
-			return;
-		}
 		submitting = true;
 		submitError = '';
 		try {
+			const token = await getRecaptchaToken();
 			const data = new FormData(form);
-			data.set('g-recaptcha-response', token);
-			const res = await fetch(form.action, {
+			const payload: Record<string, string> = { 'g-recaptcha-response': token };
+			data.forEach((value, key) => {
+				payload[key] = typeof value === 'string' ? value : '';
+			});
+			const res = await fetch(FORM_ENDPOINT, {
 				method: 'POST',
-				body: data,
-				headers: { Accept: 'application/json' }
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload)
 			});
 			if (!res.ok) throw new Error(`Request failed (${res.status})`);
 			submitted = true;
 		} catch (err) {
 			submitError = err instanceof Error ? err.message : 'Unable to send message';
-			g?.reset();
 		} finally {
 			submitting = false;
 		}
@@ -125,12 +141,6 @@
 	}
 
 	onMount(() => {
-		// reCAPTCHA callback — invoked after the invisible challenge passes,
-		// then we trigger a native form submit (statikform.js hijacks it).
-		(window as unknown as { submitForm: () => void }).submitForm = () => {
-			void sendForm();
-		};
-
 		const tick = () => {
 			const fmt = new Intl.DateTimeFormat('en-US', {
 				hour: '2-digit',
@@ -404,9 +414,10 @@
 						<form
 							id="contact-form"
 							class="contact-form"
-							action="https://statikform.com/api/f/d886a2bd5947e64d"
-							method="POST"
-							onsubmit={(e) => e.preventDefault()}
+							onsubmit={(e) => {
+								e.preventDefault();
+								void sendForm();
+							}}
 						>
 							<div class="field">
 								<label for="contact-email">
@@ -439,12 +450,13 @@
 							<div class="field submit-row">
 								<button
 									type="submit"
-									class="btn primary g-recaptcha"
+									class="btn primary"
 									class:is-submitting={submitting}
 									disabled={submitting}
-									data-sitekey="6LdrwsQsAAAAAOuDfGy3napm2YnvDL7dsUEWjreV"
-									data-callback="submitForm"
-									data-action="submit"
+									onclick={(e) => {
+										e.preventDefault();
+										void sendForm();
+									}}
 								>
 									{#if submitting}
 										<svg class="spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
