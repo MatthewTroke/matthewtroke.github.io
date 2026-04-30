@@ -1,12 +1,30 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { mdsvex } from 'mdsvex';
+import { mdsvex, escapeSvelte } from 'mdsvex';
+import { createHighlighter } from 'shiki';
+
+const theme = 'github-dark-dimmed';
+const langs = ['ts', 'tsx', 'js', 'jsx', 'svelte', 'html', 'css', 'json', 'bash', 'shell', 'md', 'yaml', 'sql'];
+
+const highlighter = await createHighlighter({ themes: [theme], langs });
+
+/** @type {import('mdsvex').MdsvexOptions} */
+const mdsvexOptions = {
+	extensions: ['.md'],
+	highlight: {
+		highlighter: (code, lang = 'text') => {
+			const safeLang = langs.includes(lang) ? lang : 'text';
+			const html = escapeSvelte(highlighter.codeToHtml(code, { lang: safeLang, theme }));
+			return `{@html \`${html}\`}`;
+		}
+	}
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', '.md'],
 
-	preprocess: [vitePreprocess(), mdsvex({ extensions: ['.md'] })],
+	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
 
 	kit: {
 		adapter: adapter({

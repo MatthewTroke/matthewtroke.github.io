@@ -303,7 +303,6 @@
 				<a class="btn primary" href="https://statikform.com" target="_blank" rel="noopener">
 					Visit statikform.com →
 				</a>
-				<a class="btn" href="/projects/neural-decks">Next case study →</a>
 			</div>
 		</div>
 	</section>

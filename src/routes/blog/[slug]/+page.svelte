@@ -322,7 +322,7 @@
 	.post-body :global(pre) {
 		margin: 1.6em 0;
 		padding: 18px 20px;
-		background: var(--bg-elev);
+		background: var(--bg-elev) !important;
 		border: 1px solid var(--line);
 		border-radius: 8px;
 		overflow-x: auto;
@@ -334,8 +334,12 @@
 		background: transparent;
 		border: 0;
 		border-radius: 0;
-		color: var(--ink);
 		font-size: inherit;
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+	}
+	.post-body :global(pre.shiki),
+	.post-body :global(pre.shiki span) {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
 	}
 
 	.post-body :global(table) {

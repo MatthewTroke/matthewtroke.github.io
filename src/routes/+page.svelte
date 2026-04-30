@@ -1174,49 +1174,6 @@
 		display: block;
 	}
 
-	.visual-decks {
-		background:
-			radial-gradient(circle at 70% 40%, rgba(247, 120, 186, 0.1), transparent 50%),
-			linear-gradient(180deg, #0e1013, #0a0b0d);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 10px;
-		padding: 20px;
-	}
-	.visual-decks :global(.card) {
-		width: 70px;
-		height: 100px;
-		border: 1px solid var(--line-strong);
-		border-radius: 6px;
-		background: var(--bg-elev);
-		padding: 10px 8px;
-		font-size: 8px;
-		color: var(--ink-dim);
-		display: flex;
-		flex-direction: column;
-		transition: transform 0.3s;
-	}
-	.visual-decks :global(.card.r1) { transform: rotate(-8deg) translateY(6px); }
-	.visual-decks :global(.card.r2) { transform: rotate(-3deg); }
-	.visual-decks :global(.card.r3) {
-		transform: rotate(2deg) translateY(-4px);
-		border-color: var(--pink);
-		color: var(--pink);
-	}
-	.visual-decks :global(.card.r4) { transform: rotate(6deg) translateY(4px); }
-	.visual-decks :global(.card .top) {
-		font-weight: 600;
-		font-size: 9px;
-		margin-bottom: 4px;
-		letter-spacing: 0.1em;
-	}
-	.visual-decks :global(.card .mid) {
-		flex: 1;
-		font-size: 8px;
-		line-height: 1.4;
-	}
-
 	.post-list {
 		display: flex;
 		flex-direction: column;
