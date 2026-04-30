@@ -1,0 +1,37 @@
+media:
+  input: static/blog
+  output: /blog
+
+content:
+  - name: posts
+    label: Blog Posts
+    type: collection
+    path: src/content/posts
+    filename: '{slug}.md'
+    view:
+      fields: [title, date, draft]
+      sort: [date]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+        options:
+          format: 'yyyy-MM-dd'
+      - name: description
+        label: Description
+        type: string
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: body
+        label: Body
+        type: rich-text

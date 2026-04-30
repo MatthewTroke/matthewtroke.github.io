@@ -9,6 +9,33 @@
 		action: () => void;
 	};
 
+	type PostMeta = {
+		title: string;
+		date: string;
+		description?: string;
+		draft?: boolean;
+	};
+
+	const postModules = import.meta.glob<{ metadata: PostMeta }>('/src/content/posts/*.md', {
+		eager: true
+	});
+	const posts = Object.entries(postModules)
+		.map(([path, mod]) => {
+			const slug = path.split('/').pop()!.replace(/\.md$/, '');
+			return { slug, ...mod.metadata };
+		})
+		.filter((p) => !p.draft)
+		.sort((a, b) => +new Date(b.date) - +new Date(a.date))
+		.slice(0, 5);
+
+	function formatPostDate(d: string) {
+		return new Date(d).toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
+		});
+	}
+
 	let cmdkOpen = $state(false);
 	let query = $state('');
 	let activeIndex = $state(0);
@@ -33,7 +60,9 @@
 		{ group: 'Navigate', icon: '§', label: 'Jump to Work', hint: 'g w', action: () => scrollToId('work') },
 		{ group: 'Navigate', icon: '§', label: 'Jump to Projects', hint: 'g p', action: () => scrollToId('projects') },
 		{ group: 'Navigate', icon: '§', label: 'Jump to Now', hint: 'g n', action: () => scrollToId('now') },
+		{ group: 'Navigate', icon: '§', label: 'Jump to Writing', hint: 'g b', action: () => scrollToId('writing') },
 		{ group: 'Navigate', icon: '§', label: 'Jump to Contact', hint: 'g c', action: () => scrollToId('contact') },
+		{ group: 'Writing', icon: '✎', label: 'Open — Blog', hint: '/blog', action: () => (location.href = '/blog') },
 		{ group: 'Projects', icon: '◆', label: 'Open — Statik Form', hint: 'case study', action: () => (location.href = '/projects/statik-form') },
 		{ group: 'External', icon: '↗', label: 'GitHub — @MatthewTroke', hint: 'github.com', action: () => window.open('https://github.com/MatthewTroke', '_blank') },
 		{ group: 'External', icon: '↗', label: 'LinkedIn — /matthewtroke', hint: 'linkedin', action: () => window.open('https://linkedin.com/in/matthewtroke', '_blank') },
@@ -197,7 +226,8 @@
 			<a href="#work"><span class="n">01</span>work</a>
 			<a href="#projects"><span class="n">02</span>projects</a>
 			<a href="#now"><span class="n">03</span>now</a>
-			<a href="#contact"><span class="n">04</span>contact</a>
+			<a href="#writing"><span class="n">04</span>writing</a>
+			<a href="#contact"><span class="n">05</span>contact</a>
 		</nav>
 		<div style="display:flex; align-items:center; gap:10px; color:var(--ink-mute); font-size:11px;">
 			<span>press</span>
@@ -389,10 +419,46 @@
 		</div>
 	</section>
 
+	<section id="writing" class="sec-pad">
+		<div class="container">
+			<div class="sec-head">
+				<div class="sec-num">§ <b>03</b> / Writing</div>
+				<h2 class="sec-title">
+					Notes & write-ups.<em>Engineering, products, the occasional teardown.</em>
+				</h2>
+			</div>
+
+			<div class="projects">
+				<div></div>
+				<div class="post-list">
+					{#if posts.length === 0}
+						<div class="post-empty">No posts yet — check back soon.</div>
+					{:else}
+						{#each posts as post (post.slug)}
+							<a class="post" href="/blog/{post.slug}">
+								<div class="post-meta">
+									<span>{formatPostDate(post.date)}</span>
+									<span class="arr">↗</span>
+								</div>
+								<h4>{post.title}</h4>
+								{#if post.description}
+									<p>{post.description}</p>
+								{/if}
+							</a>
+						{/each}
+						<a class="post-all" href="/blog">
+							View all posts <span class="arr">↗</span>
+						</a>
+					{/if}
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<section id="contact" class="contact">
 		<div class="container">
 			<div class="contact-grid">
-				<div class="sec-num">§ <b>03</b> / Contact</div>
+				<div class="sec-num">§ <b>04</b> / Contact</div>
 				<div>
 					<h2>Available for<br /><span class="i">select work.</span></h2>
 					<p>
@@ -1149,6 +1215,93 @@
 		flex: 1;
 		font-size: 8px;
 		line-height: 1.4;
+	}
+
+	.post-list {
+		display: flex;
+		flex-direction: column;
+	}
+	.post {
+		display: block;
+		padding: 22px 0;
+		border-top: 1px solid var(--line);
+		transition:
+			padding-left 0.2s,
+			color 0.15s;
+	}
+	.post:last-of-type {
+		border-bottom: 1px solid var(--line);
+	}
+	.post:hover {
+		padding-left: 8px;
+	}
+	.post-meta {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		font-size: 11px;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+		margin-bottom: 8px;
+	}
+	.post-meta :global(.arr) {
+		color: var(--ink-faint);
+		transition:
+			color 0.15s,
+			transform 0.2s;
+	}
+	.post:hover .post-meta :global(.arr) {
+		color: var(--accent);
+		transform: translate(3px, -3px);
+	}
+	.post h4 {
+		font-family: 'Instrument Serif', Georgia, serif;
+		font-weight: 400;
+		font-style: italic;
+		font-size: 26px;
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+		margin: 0 0 6px;
+		color: var(--ink);
+	}
+	.post:hover h4 {
+		color: var(--accent);
+	}
+	.post p {
+		margin: 0;
+		color: var(--ink-dim);
+		font-size: 13px;
+		line-height: 1.65;
+		max-width: 620px;
+	}
+	.post-all {
+		margin-top: 20px;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 12px;
+		letter-spacing: 0.06em;
+		color: var(--ink-dim);
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		align-self: flex-start;
+		transition: color 0.15s;
+	}
+	.post-all:hover {
+		color: var(--accent);
+	}
+	.post-all :global(.arr) {
+		transition: transform 0.2s;
+	}
+	.post-all:hover :global(.arr) {
+		transform: translate(2px, -2px);
+	}
+	.post-empty {
+		padding: 22px 0;
+		color: var(--ink-mute);
+		font-size: 13px;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
 	}
 
 	.contact {
