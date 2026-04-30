@@ -227,7 +227,7 @@
 					<h2 class="hero-headline">
 						Full-stack<br />
 						engineer <span class="i">building</span><br />
-						at the edges<span style="color:var(--accent)">.</span>
+						at the edges<span style="color:var(--accent)">:</span>
 					</h2>
 
 					<p class="hero-sub">
