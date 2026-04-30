@@ -1,19 +1,24 @@
 ---
-title: Markdown Kitchen Sink
+title: How to deal with Stripe without losing your mind
 date: 2026-04-30
-description: A test post exercising every markdown feature — headings, code blocks, lists, blockquotes, tables, links, and inline formatting.
+description: A test post exercising every markdown feature — headings, code
+  blocks, lists, blockquotes, tables, links, and inline formatting.
 draft: false
 ---
-
 This post exists to verify that the blog pipeline renders every markdown feature correctly. If something here looks broken, the styling needs work.
 
 ## Headings
 
 # H1 — top of hierarchy
+
 ## H2 — section
+
 ### H3 — subsection
+
 #### H4 — sub-sub
+
 ##### H5
+
 ###### H6
 
 ## Inline formatting
@@ -92,9 +97,9 @@ Ordered:
 
 Task list:
 
-- [x] Set up mdsvex
-- [x] Wire up Pages CMS
-- [ ] Write more posts
+- Set up mdsvex
+- Wire up Pages CMS
+- Write more posts
 
 ## Blockquote
 
@@ -110,11 +115,13 @@ Nested:
 
 ## Table
 
-| Tool        | Purpose            | Year |
-| ----------- | ------------------ | ---- |
-| SvelteKit   | App framework      | 2026 |
-| mdsvex      | Markdown rendering | 2026 |
-| Pages CMS   | Authoring UI       | 2026 |
+
+| Tool | Purpose | Year |
+| --------- | ------------------ | ---- |
+| SvelteKit | App framework | 2026 |
+| mdsvex | Markdown rendering | 2026 |
+| Pages CMS | Authoring UI | 2026 |
+
 
 ## Horizontal rule
 
