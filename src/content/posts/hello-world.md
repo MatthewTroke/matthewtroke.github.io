@@ -83,7 +83,7 @@ if (SUPPORTED_EVENTS.has(event.type)) {
 }
 ```
 
-Once you get your subscription, store it wherever you want. I choose to throw it in another KV since I'm using Cloudflare Workers, but you can also throw it in a subscriptions table in your database and link it to a user. I like a userId to a snapshot of a subscription.
+Once you get your subscription, store it wherever you want. I choose to throw it in another KV since I'm using Cloudflare Workers, but you can also throw it in a subscriptions table in your database and link it to a user. I link a userId to a snapshot of a subscription, so whenever I need to know if a user is subscriped, I can count on this KV being up-to-date from when webhooks come in.
 
 ```typescript
 `sub:123 -> SubscriptionSnapshot`
