@@ -39,6 +39,8 @@ export const customerKey = (customerId: string) => `stripe:customer:${customerId
 
 Secondly, you don't want to rely on the payload within webhooks. Instead of listening to webhooks and changing data based on the event type & the payload itself, use webhooks as an indicator that something *changed.* 
 
+
+
 ```typescript
 const SUPPORTED_EVENTS = new Set<Stripe.Event.Type>([
 	'checkout.session.completed',
