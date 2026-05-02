@@ -255,17 +255,16 @@
 					</h1>
 
 					<h2 class="hero-headline">
-						Full-stack<br />
-						engineer <span class="i">building</span><br />
-						at the edges<span style="color:var(--accent)">:</span>
+						Full-stack engineer,<br />
+						building things<br />
+						that ship<span style="color:var(--accent)">.</span> <span class="i">Yours?</span>
 					</h2>
 
 					<p class="hero-sub">
-						Decade of shipping product at the intersection of engineering and design — at both
-						startups and some of the largest tech companies in the bay area.
-						<strong>Stitch Labs</strong>
-						<span style="color:var(--ink-faint)">→</span>
-						<strong>Square</strong>.
+						A decade of full-stack work, mostly in the Bay Area —
+						<strong>Stitch Labs</strong>, then <strong>Square</strong> through the
+						acquisition. Currently freelancing for <strong>Yahoo</strong>, and looking
+						for the next interesting problem.
 					</p>
 
 					<div class="hero-cta">
@@ -331,6 +330,25 @@
 			</div>
 
 			<div>
+				<article class="role">
+					<div class="role-when">
+						<b>2026 — Present</b>
+						Sunnyvale, CA · Remote
+						<span class="badge">Current</span>
+					</div>
+					<div>
+						<h3>
+							<a href="https://www.yahoo.com" target="_blank" rel="noopener">
+								Yahoo <span class="arr">↗</span>
+							</a>
+						</h3>
+						<div class="role-meta"><span>Freelance Software Engineer</span><span>AOL Web</span></div>
+						<ul>
+							<li>Supporting AOL Web.</li>
+						</ul>
+					</div>
+				</article>
+
 				<article class="role">
 					<div class="role-when">
 						<b>Jul 2020 — Jul 2023</b>
