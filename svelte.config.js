@@ -4,7 +4,7 @@ import { mdsvex, escapeSvelte } from 'mdsvex';
 import { createHighlighter } from 'shiki';
 
 const theme = 'github-dark-dimmed';
-const langs = ['ts', 'tsx', 'js', 'jsx', 'svelte', 'html', 'css', 'json', 'bash', 'shell', 'md', 'yaml', 'sql'];
+const langs = ['ts', 'typescript', 'tsx', 'js', 'javascript', 'jsx', 'svelte', 'html', 'css', 'json', 'bash', 'sh', 'shell', 'md', 'markdown', 'yaml', 'yml', 'sql'];
 
 const highlighter = await createHighlighter({ themes: [theme], langs });
 
